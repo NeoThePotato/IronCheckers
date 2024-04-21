@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronCheckers", "IronCheckers\IronCheckers.csproj", "{0A56C481-2EC3-4D16-83DF-D7F69ACD85A1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronEngine", "IronEngine\IronEngine.csproj", "{3C697519-C701-454B-954E-77FCA82E76B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronRenderer", "IronRenderer\IronRenderer.csproj", "{ED4EBC23-2B32-45A3-A718-30F6500B550C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{0A56C481-2EC3-4D16-83DF-D7F69ACD85A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A56C481-2EC3-4D16-83DF-D7F69ACD85A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A56C481-2EC3-4D16-83DF-D7F69ACD85A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C697519-C701-454B-954E-77FCA82E76B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C697519-C701-454B-954E-77FCA82E76B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C697519-C701-454B-954E-77FCA82E76B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C697519-C701-454B-954E-77FCA82E76B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED4EBC23-2B32-45A3-A718-30F6500B550C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED4EBC23-2B32-45A3-A718-30F6500B550C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED4EBC23-2B32-45A3-A718-30F6500B550C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED4EBC23-2B32-45A3-A718-30F6500B550C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
