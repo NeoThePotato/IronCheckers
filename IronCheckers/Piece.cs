@@ -2,7 +2,7 @@
 
 namespace IronCheckers
 {
-	class Piece : TileObject
+	public class Piece : TileObject, IActionable
 	{
 		public int movementDirectionY;
 
@@ -20,7 +20,7 @@ namespace IronCheckers
 				Destroy();
 		}
 
-		public override IEnumerable<Func<bool>>? GetAvailableActions()
+		public IEnumerable<Func<bool>>? GetAvailableActions()
 		{
 			if (TileMap != null)
 			{

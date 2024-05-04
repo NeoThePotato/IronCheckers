@@ -2,8 +2,23 @@
 
 using System.Drawing;
 using IronEngine;
+using IronCheckers;
 
-class GameManager
+internal static class Program
+{
+    public static void Main()
+    {
+        Console.WriteLine("White Player, please enter your name:");
+        var whitePlayerName = Console.ReadLine() ?? "White Player";
+        Console.WriteLine("Black Player, please enter your name:");
+        var blackPlayerName = Console.ReadLine() ?? "Black Player";
+        Console.WriteLine("Let the games begin!");
+
+        GameInstanceManager.StartNewGame(whitePlayerName, blackPlayerName);
+    }
+}
+
+/*class GameManager
 {
     private int currentTurnIndex;
     
@@ -48,7 +63,7 @@ class BoardManager : TileMap
         foreach (var tile in this)
         {
             TileActionabilityPreview preview = action.GetTileActionability(tile);
-            tile.DisplayActionabilityPreview(preview); //Renderer stuff
+            //tile.DisplayActionabilityPreview(preview); //Renderer stuff
         }
     }
     
@@ -157,6 +172,11 @@ class Pawn : TileObject
         //needs further implementation on how the action affects this pawn
         action.Execute(tile, this);
     }
+
+    public override IEnumerable<Func<bool>>? GetAvailableActions()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 abstract class PawnAction
@@ -248,4 +268,4 @@ public abstract class TileSelectionParameters
     /// <param name="tile">The tile to set the actionability for.</param>
     /// <returns>The actionability rating of the tile.</returns>
     public abstract int GetTileActionabilityRating(Tile tile);
-}
+}*/
