@@ -20,7 +20,7 @@ namespace IronCheckers
 				Destroy();
 		}
 
-		public IEnumerable<Func<bool>>? GetAvailableActions()
+		public IEnumerable<IActionable.Action> GetAvailableActions()
 		{
 			if (TileMap != null)
 			{
@@ -29,23 +29,36 @@ namespace IronCheckers
 			}
 		}
 
-		private Func<bool>? GetDiagonalAction(int xOffset)
+		private IActionable.Action GetDiagonalAction(int xOffset)
 		{
 			var tile = GetDiagonalTile(xOffset);
 			if (ValidAndEmpty(tile))
-				return () => { Move(tile); return true; };
-			else if (HasFoePiece(tile))
+				return new($"Move to {tile}" , () => { Move(tile); return true; });
+			else if (HasFoePiece(tile, out Piece? piece))
 			{
 				tile = GetDiagonalTile(xOffset, 2);
 				if (ValidAndEmpty(tile))
-					return () => { Move(tile); return true; };
+					return new($"Eat {piece} at {piece!.CurrentTile}", () => { Move(tile); return true; });
 			}
-			return null;
+			return default;
 		}
 
 		private static bool ValidAndEmpty(Tile? tile) => tile != null && !tile.HasObject;
 
-		private bool HasFoePiece(Tile? tile) => tile != null && tile.HasObject && tile.Object!.Actor != Actor;
+		private bool HasFoePiece(Tile? tile, out Piece? piece)
+		{
+			piece = null;
+			if (tile == null)
+			{
+				return false;
+			}
+			else if (tile.HasObject && tile.Object is Piece pieceTemp)
+			{
+				piece = pieceTemp;
+				return piece.Actor != Actor;
+			}
+			return false;
+		}
 
 		private Tile? GetDiagonalTile(int xOffset, int steps = 1) => TileMap![Position + new Position(xOffset, movementDirectionY) * steps];
 	}
