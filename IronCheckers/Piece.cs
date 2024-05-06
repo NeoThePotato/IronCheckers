@@ -14,7 +14,7 @@ namespace IronCheckers
 				movementDirectionY = Math.ClampRange(movementDirection, -1, 1);
 		}
 
-		private void OnObjectPass(TileObject other)
+		public override void OnObjectPass(TileObject other)
 		{
 			if (other.Actor != Actor)
 				Destroy();
