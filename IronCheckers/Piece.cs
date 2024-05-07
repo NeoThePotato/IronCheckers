@@ -24,41 +24,37 @@ namespace IronCheckers
 		{
 			if (TileMap != null)
 			{
-				yield return GetDiagonalAction(1);
-				yield return GetDiagonalAction(-1);
+				if (TryGetDiagonalAction(1, out var action))
+					yield return action;
+				if (TryGetDiagonalAction(-1, out action))
+					yield return action;
 			}
 		}
 
-		private IActionable.Action GetDiagonalAction(int xOffset)
+		private bool TryGetDiagonalAction(int xOffset, out IActionable.Action action)
 		{
 			var tile = GetDiagonalTile(xOffset);
 			if (ValidAndEmpty(tile))
-				return new($"Move to {tile}" , () => { Move(tile); return true; });
+			{
+				action = new($"Move to {tile}", () => { Move(tile); return true; });
+				return true;
+			}
 			else if (HasFoePiece(tile, out Piece? piece))
 			{
 				tile = GetDiagonalTile(xOffset, 2);
 				if (ValidAndEmpty(tile))
-					return new($"Eat {piece} at {piece!.CurrentTile}", () => { Move(tile); return true; });
+				{
+					action = new($"Eat {piece} at {piece!.CurrentTile}", () => { Move(tile); return true; });
+					return true;
+				}
 			}
-			return default;
+			action = default;
+			return false;
 		}
 
 		private static bool ValidAndEmpty(Tile? tile) => tile != null && !tile.HasObject;
 
-		private bool HasFoePiece(Tile? tile, out Piece? piece)
-		{
-			piece = null;
-			if (tile == null)
-			{
-				return false;
-			}
-			else if (tile.HasObject && tile.Object is Piece pieceTemp)
-			{
-				piece = pieceTemp;
-				return piece.Actor != Actor;
-			}
-			return false;
-		}
+		private bool HasFoePiece(Tile? tile, out Piece? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
 
 		private Tile? GetDiagonalTile(int xOffset, int steps = 1) => TileMap![Position + new Position(xOffset, movementDirectionY) * steps];
 	}
