@@ -2,7 +2,7 @@
 
 namespace IronCheckers
 {
-	public class Piece : TileObject, IActionable
+	public class Piece : TileObject, ICommandAble, ICommandAble.IHasKey
 	{
 		public int movementDirectionY;
 
@@ -22,7 +22,7 @@ namespace IronCheckers
 				Destroy();
 		}
 
-		public IEnumerable<IActionable.Action> GetAvailableActions()
+		public IEnumerable<ICommandAble.Command> GetAvailableActions()
 		{
 			if (TileMap != null)
 			{
@@ -33,12 +33,12 @@ namespace IronCheckers
 			}
 		}
 
-		private bool TryGetDiagonalAction(int xOffset, out IActionable.Action action)
+		private bool TryGetDiagonalAction(int xOffset, out ICommandAble.Command action)
 		{
 			var tile = GetDiagonalTile(xOffset);
 			if (ValidAndEmpty(tile))
 			{
-				action = new($"Move to {tile}", () => { Move(tile); return true; });
+				action = new(() => Move(tile!), $"Move to {tile}", tile!.ToString());
 				return true;
 			}
 			else if (HasFoePiece(tile, out Piece? piece))
@@ -46,7 +46,7 @@ namespace IronCheckers
 				tile = GetDiagonalTile(xOffset, 2);
 				if (ValidAndEmpty(tile))
 				{
-					action = new($"Eat {piece}", () => { Move(tile); return true; });
+					action = new(() => Move(tile!), $"Eat {piece}", tile!.ToString());
 					return true;
 				}
 			}
@@ -61,5 +61,7 @@ namespace IronCheckers
 		private Tile? GetDiagonalTile(int xOffset, int steps = 1) => TileMap![Position + new Position(xOffset, movementDirectionY) * steps];
 
 		public override string ToString() => $"{Actor}'s piece at {CurrentTile}";
+
+		public string? Key => CurrentTile?.ToString();
 	}
 }
