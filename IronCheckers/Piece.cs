@@ -6,7 +6,9 @@ namespace IronCheckers
 	{
 		public int movementDirectionY;
 
-		public Piece(Tile tile, Actor actor, int movementDirection) : base(tile, actor)
+		public override Func<IMoveable, Tile, IEnumerable<Tile>> DefaultMovementStrategy => IMoveable.ShortestDirect;
+
+		public Piece(Player player, int movementDirection) : base(player)
 		{
 			if (movementDirection == 0)
 				movementDirectionY = 1;
