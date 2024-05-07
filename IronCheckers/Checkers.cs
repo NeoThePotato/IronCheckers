@@ -22,9 +22,9 @@ namespace IronCheckers
 
         protected override TileMap CreateTileMap()
         {
-            TileMap tileMap = new(8, 8, new Tile());
-			tileMap[1, 7].Object = new Piece(blackPlayer, -1);
-			tileMap[0, 0].Object = new Piece(whitePlayer, 1);
+            TileMap tileMap = new(8, 8, new CheckersTile());
+			tileMap[0, 7].Object = new Piece(whitePlayer, -1);
+			tileMap[1, 0].Object = new Piece(blackPlayer, 1);
 			return tileMap;
         }
 
@@ -32,6 +32,12 @@ namespace IronCheckers
         {
             Console.WriteLine("Game ended");
         }
-    }
+
+		public static string ToChessIndexing(TileMap tileMap, Position position) => $"{ToChessIndexingX(position.x)}{ToChessIndexingY(tileMap, position.y)}";
+
+		public static int ToChessIndexingY(TileMap tileMap, int y) => tileMap.SizeY - y;
+
+		public static char ToChessIndexingX(int x) => (char)(65 + x);
+	}
 }
 

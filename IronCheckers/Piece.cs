@@ -46,7 +46,7 @@ namespace IronCheckers
 				tile = GetDiagonalTile(xOffset, 2);
 				if (ValidAndEmpty(tile))
 				{
-					action = new($"Eat {piece} at {piece!.CurrentTile}", () => { Move(tile); return true; });
+					action = new($"Eat {piece}", () => { Move(tile); return true; });
 					return true;
 				}
 			}
@@ -59,5 +59,7 @@ namespace IronCheckers
 		private bool HasFoePiece(Tile? tile, out Piece? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
 
 		private Tile? GetDiagonalTile(int xOffset, int steps = 1) => TileMap![Position + new Position(xOffset, movementDirectionY) * steps];
+
+		public override string ToString() => $"{Actor}'s piece at {CurrentTile}";
 	}
 }

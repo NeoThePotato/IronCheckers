@@ -27,7 +27,6 @@ public class Player : Actor
     private List<Piece> removedPieces;
     #endregion
 
-
     #region Public Functions
     
     /// <summary>
@@ -72,5 +71,7 @@ public class Player : Actor
     {
         return MyPieces.OfType<T>();
     }
-    #endregion
+	#endregion
+
+	public override string ToString() => Name;
 }
