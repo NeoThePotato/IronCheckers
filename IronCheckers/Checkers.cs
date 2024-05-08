@@ -30,7 +30,12 @@ namespace IronCheckers
 			return tileMap;
         }
 
-        protected override void OnExit()
+		protected override IRenderer CreateRenderer()
+		{
+			return new IronRenderer.ConsoleRenderer(TileMap);
+		}
+
+		protected override void OnExit()
         {
             Console.WriteLine("Game ended");
         }
