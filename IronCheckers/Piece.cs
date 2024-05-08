@@ -46,7 +46,7 @@ namespace IronCheckers
 				tile = GetDiagonalTile(xOffset, 2);
 				if (ValidAndEmpty(tile))
 				{
-					action = new(() => Move(tile!), $"Eat {piece}", tile!.ToString());
+					action = new(() => Move(tile!), $"Capture {piece}", tile!.ToString());
 					return true;
 				}
 			}
