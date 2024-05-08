@@ -25,5 +25,10 @@ public class Player : Actor
         Name = name;
 	}
 
+	protected override void OnTurnStart()
+	{
+		Console.WriteLine($"{this}'s turn.");
+	}
+
 	public override string ToString() => Name;
 }
