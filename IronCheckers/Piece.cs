@@ -33,15 +33,31 @@ namespace IronCheckers
 			}
 		}
 
-		private bool TryGetDiagonalAction(int xOffset, out ICommandAble.Command action)
+		protected bool TryGetDiagonalAction(int xOffset, out ICommandAble.Command action)
 		{
 			var tile = GetDiagonalTile(xOffset);
+			if (TryMove(tile, out action))
+				return true;
+			else if (TryCapture(tile, xOffset, out action))
+				return true;
+			action = default;
+			return false;
+		}
+
+		protected bool TryMove(Tile? tile, out ICommandAble.Command action)
+		{
 			if (ValidAndEmpty(tile))
 			{
 				action = new(() => Move(tile!), $"Move to {tile}", tile!.ToString());
 				return true;
 			}
-			else if (HasFoePiece(tile, out Piece? piece))
+			action = default;
+			return false;
+		}
+
+		protected bool TryCapture(Tile? tile, int xOffset, out ICommandAble.Command action)
+		{
+			if (HasFoePiece(tile, out Piece? piece))
 			{
 				tile = GetDiagonalTile(xOffset, 2);
 				if (ValidAndEmpty(tile))
@@ -54,11 +70,11 @@ namespace IronCheckers
 			return false;
 		}
 
-		private static bool ValidAndEmpty(Tile? tile) => tile != null && !tile.HasObject;
+		protected static bool ValidAndEmpty(Tile? tile) => tile != null && !tile.HasObject;
 
-		private bool HasFoePiece(Tile? tile, out Piece? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
+		protected bool HasFoePiece(Tile? tile, out Piece? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
 
-		private Tile? GetDiagonalTile(int xOffset, int steps = 1) => TileMap![Position + new Position(xOffset, movementDirectionY) * steps];
+		protected Tile? GetDiagonalTile(int xOffset, int steps = 1) => TileMap![Position + new Position(xOffset, movementDirectionY) * steps];
 
 		public override string ToString() => $"{Actor}'s piece at {CurrentTile}";
 
