@@ -63,5 +63,7 @@ namespace IronCheckers
 		public override string ToString() => $"{Actor}'s piece at {CurrentTile}";
 
 		public string? Key => CurrentTile?.ToString();
+
+		public string Description => ToString();
 	}
 }
