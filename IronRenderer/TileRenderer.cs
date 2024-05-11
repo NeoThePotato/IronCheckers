@@ -4,57 +4,53 @@ using static IronRenderer.ConsoleRenderer;
 
 namespace IronRenderer
 {
-    internal class TileRenderer : IConsoleRenderer
-    {
-        public const int SIZE_X = 6;
-		public const int SIZE_Y = 3;
+	internal class TileRenderer : IConsoleRenderer
+	{
+		public static int sizeX = 12;
+		public static int sizeY = 6;
 
-        private FrameBuffer _cache;
-        protected Tile _tile;
+		protected Tile _tile;
 
-        public FrameBuffer Buffer { get; set; }
+		public static FrameBuffer Buffer => ConsoleRenderer.Buffer;
 
-        public int SizeJ => SIZE_X;
-        public int SizeI => SIZE_Y;
-        public (int, int) Size => (SizeJ, SizeI);
+		public int SizeJ => sizeX;
+		public int SizeI => sizeY;
+		public (int, int) Size => (SizeJ, SizeI);
 
-        public TileRenderer(Tile tile)
-        {
-            _cache = new FrameBuffer(SizeJ, SizeI);
-            _tile = tile;
-			RenderToCache();
+		public TileRenderer(Tile tile)
+		{
+			_tile = tile;
 		}
 
-        public virtual void UpdateFrame()
-        {
-            FrameBuffer.Copy(Buffer, _cache);
-            if (_tile.HasObject)
-            {
-                if (_tile.Object is IRenderAble rednderable)
-                {
-                    var rednderer = rednderable.GetRenderer();
-					if (rednderer is IConsoleRenderer consoleRenderer)
-                        consoleRenderer.Buffer = Buffer;
-					rednderer.UpdateFrame();
+		public virtual void UpdateFrame()
+		{
+			RenderTile();
+			TryRenderTileObject();
+		}
+
+		public void RenderTile()
+		{
+			var buffer = TileMapRenderer.GetFrameBufferAtPosition(Buffer, _tile.Position);
+			for (int i = 0; i < SizeI; i++)
+			{
+				for (int j = 0; j < SizeJ; j++)
+				{
+					buffer[j, i] = EMPTY_CHAR;
 				}
-            }
-        }
+			}
+		}
 
-        public void UpdateFrameFull()
-        {
-			RenderToCache();
-            UpdateFrame();
-        }
-
-        public void RenderToCache()
-        {
-            for (int i = 0; i < SizeI; i++)
-            {
-                for (int j = 0; j < SizeJ; j++)
-                {
-					_cache[j, i] = EMPTY_CHAR;
-                }
-            }
-        }
-    }
+		public bool TryRenderTileObject()
+		{
+			if (_tile.HasObject)
+			{
+				if (_tile.Object is IRenderAble renderable)
+				{
+					renderable.GetRenderer().UpdateFrame();
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 }

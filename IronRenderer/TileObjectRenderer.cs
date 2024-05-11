@@ -7,16 +7,15 @@ namespace IronRenderer
 	{
 		protected TileObject _tileObject;
 
-		public FrameBuffer Buffer { get; set; }
+		public FrameBuffer Buffer => ConsoleRenderer.Buffer;
 		
-		public int SizeJ => TileRenderer.SIZE_X;
-		public int SizeI => TileRenderer.SIZE_Y;
+		public int SizeJ => TileRenderer.sizeX;
+		public int SizeI => TileRenderer.sizeY;
 		public (int, int) Size => (SizeJ, SizeI);
 
 		public TileObjectRenderer(TileObject tileObject)
 		{
 			_tileObject = tileObject;
-			Render();
 		}
 
 		public virtual void UpdateFrame()
@@ -24,18 +23,13 @@ namespace IronRenderer
 			Render();
 		}
 
-		public void UpdateFrameFull()
-		{
-			Render();
-		}
-
 		public void Render()
 		{
+			var buffer = TileMapRenderer.GetFrameBufferAtPosition(Buffer, _tileObject.Position);
 			for (int i = 0; i < SizeI; i++)
 			{
 				for (int j = 0; j < SizeJ; j++)
 				{
-					FrameBuffer buffer = Buffer;
 					buffer[j, i] = EMPTY_CHAR;
 				}
 			}
