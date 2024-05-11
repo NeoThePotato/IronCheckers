@@ -17,7 +17,7 @@ namespace IronCheckers
 		protected override IEnumerable<Actor> CreateActors()
 		{
 			yield return whitePlayer = new Player(Input.GetString("White Player, please enter your name: "), ConsoleRenderer.COLOR_WHITE);
-			yield return blackPlayer = new Player(Input.GetString("Black Player, please enter your name: "), ConsoleRenderer.COLOR_BLACK);
+			yield return blackPlayer = new Player(Input.GetString("Black Player, please enter your name: "), 8);
 			Console.WriteLine("Let the games begin!");
 		}
 
