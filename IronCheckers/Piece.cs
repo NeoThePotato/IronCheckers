@@ -5,6 +5,8 @@ namespace IronCheckers
 {
 	public class Piece : RenderableTileObject, ICommandAble, ICommandAble.IHasKey
 	{
+		private static readonly string[] PIECE_CHARS = [@"[  ]"];
+
 		public int movementDirectionY;
 
 		public override Func<IMoveable, Tile, IEnumerable<Tile>> DefaultMovementStrategy => IMoveable.ShortestDirect;
@@ -16,7 +18,7 @@ namespace IronCheckers
 			else
 				movementDirectionY = Math.ClampRange(movementDirection, -1, 1);
 			FgColor = player.Color;
-			Char = 'x';
+			Chars = PIECE_CHARS;
 		}
 
 		public override void OnObjectPass(TileObject other)
