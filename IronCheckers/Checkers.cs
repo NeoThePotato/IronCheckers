@@ -24,8 +24,8 @@ namespace IronCheckers
         protected override TileMap CreateTileMap()
         {
             CheckersMap tileMap = new(8, 8, new CheckersTile());
-			foreach (var tile in tileMap.CheckerboardTiles(1))
-				tile.BgColor = 8;
+			foreach (var tile in tileMap.CheckerboardTiles())
+				tile.BgColor = ConsoleRenderer.COLOR_WHITE;
 			foreach (var tile in tileMap.CheckerboardTiles(1).Where(t => t.Position.y > 4))
 				tile.Object = new Piece(whitePlayer, -1);
 			foreach (var tile in tileMap.CheckerboardTiles(1).Where(t => t.Position.y < 3))
@@ -36,6 +36,11 @@ namespace IronCheckers
 		protected override IRenderer CreateRenderer()
 		{
 			return new ConsoleRenderer(TileMap);
+		}
+
+		protected override void OnGameStart()
+		{
+			(Input as ConsoleInput).SelectCommandAblePrompt = "Select Piece:";
 		}
 
 		protected override void OnExit()
