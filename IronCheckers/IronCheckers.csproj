@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IronEngine\DefaultRenderer\DefaultRenderer.csproj" />
     <ProjectReference Include="..\IronEngine\IronEngine.csproj" />
-    <ProjectReference Include="..\IronRenderer\IronRenderer.csproj" />
   </ItemGroup>
 
 </Project>

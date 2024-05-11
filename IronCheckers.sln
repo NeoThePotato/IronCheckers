@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronCheckers", "IronChecker
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronEngine", "IronEngine\IronEngine.csproj", "{3C697519-C701-454B-954E-77FCA82E76B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronRenderer", "IronRenderer\IronRenderer.csproj", "{ED4EBC23-2B32-45A3-A718-30F6500B550C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DefaultRenderer", "IronEngine\DefaultRenderer\DefaultRenderer.csproj", "{274FBC97-8A6A-4D73-AF34-0233508FCEBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,9 +22,10 @@ Global
 		{3C697519-C701-454B-954E-77FCA82E76B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C697519-C701-454B-954E-77FCA82E76B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C697519-C701-454B-954E-77FCA82E76B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED4EBC23-2B32-45A3-A718-30F6500B550C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED4EBC23-2B32-45A3-A718-30F6500B550C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED4EBC23-2B32-45A3-A718-30F6500B550C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{274FBC97-8A6A-4D73-AF34-0233508FCEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{274FBC97-8A6A-4D73-AF34-0233508FCEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{274FBC97-8A6A-4D73-AF34-0233508FCEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{274FBC97-8A6A-4D73-AF34-0233508FCEBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

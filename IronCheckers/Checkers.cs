@@ -32,7 +32,7 @@ namespace IronCheckers
 
 		protected override IRenderer CreateRenderer()
 		{
-			return new IronRenderer.ConsoleRenderer(TileMap);
+			return new IronEngine.DefaultRenderer.ConsoleRenderer(TileMap);
 		}
 
 		protected override void OnExit()
