@@ -1,9 +1,9 @@
-﻿using IronEngine;
+﻿using DefaultRenderer.Defaults;
 
 namespace IronCheckers
 {
-	public class CheckersTile : Tile
+	public class CheckersTile : RenderableTile
 	{
-		public override string ToString() => Checkers.ToChessIndexing(TileMap, Position);
+		public override string ToString() => CheckersMap.ToChessIndexing(TileMap, Position);
 	}
 }

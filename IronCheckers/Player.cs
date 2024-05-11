@@ -9,6 +9,7 @@ public class Player : Actor
 {
     #region Public Fields/Properties
     public string Name { get; private set; }
+    public byte Color { get; private set; }
 
     public int RemainingPieces => MyPieces.Count();
 
@@ -20,9 +21,10 @@ public class Player : Actor
     /// <summary>
     /// Represents a player in a game of Checkers.
     /// </summary>
-    public Player(string name)
+    public Player(string name, byte color)
     {
         Name = name;
+        Color = color;
 	}
 
 	protected override void OnTurnStart()

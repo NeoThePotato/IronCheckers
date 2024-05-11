@@ -1,8 +1,9 @@
-﻿using IronEngine;
+﻿using DefaultRenderer.Defaults;
+using IronEngine;
 
 namespace IronCheckers
 {
-	public class Piece : TileObject, ICommandAble, ICommandAble.IHasKey
+	public class Piece : RenderableTileObject, ICommandAble, ICommandAble.IHasKey
 	{
 		public int movementDirectionY;
 
@@ -14,6 +15,8 @@ namespace IronCheckers
 				movementDirectionY = 1;
 			else
 				movementDirectionY = Math.ClampRange(movementDirection, -1, 1);
+			FgColor = player.Color;
+			Char = 'x';
 		}
 
 		public override void OnObjectPass(TileObject other)
