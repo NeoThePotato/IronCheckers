@@ -1,5 +1,5 @@
-﻿using DefaultRenderer.Defaults;
-using IronEngine;
+﻿using IronEngine;
+using DefaultRenderer.Defaults;
 
 namespace IronCheckers
 {
@@ -31,19 +31,19 @@ namespace IronCheckers
 		{
 			if (TileMap != null)
 			{
-				if (TryGetDiagonalAction(1, out var action))
-					yield return action;
-				if (TryGetDiagonalAction(-1, out action))
-					yield return action;
+				foreach (var tile in GetDiagonalTiles(1))
+				{
+					if (TryGetAction(tile?.CurrentTile, out var action))
+						yield return action;
+				}
 			}
 		}
 
-		protected bool TryGetDiagonalAction(int xOffset, out ICommandAble.Command action)
+		protected bool TryGetAction(Tile? tile, out ICommandAble.Command action)
 		{
-			var tile = GetDiagonalTile(xOffset);
 			if (TryMove(tile, out action))
 				return true;
-			else if (TryCapture(tile, xOffset, out action))
+			else if (TryCapture(tile, out action))
 				return true;
 			action = default;
 			return false;
@@ -60,11 +60,11 @@ namespace IronCheckers
 			return false;
 		}
 
-		protected bool TryCapture(Tile? tile, int xOffset, out ICommandAble.Command action)
+		protected bool TryCapture(Tile? tile, out ICommandAble.Command action)
 		{
 			if (HasFoePiece(tile, out Piece? piece))
 			{
-				tile = GetDiagonalTile(xOffset, 2);
+				tile = TileMap[Position.FlipXY(tile.Position)];
 				if (ValidAndEmpty(tile))
 				{
 					action = new(() => Move(tile!), $"Capture {piece}", tile!.ToString());
@@ -79,7 +79,9 @@ namespace IronCheckers
 
 		protected bool HasFoePiece(Tile? tile, out Piece? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
 
-		protected Tile? GetDiagonalTile(int xOffset, int steps = 1) => TileMap![Position + new Position(xOffset, movementDirectionY) * steps];
+		protected Position GetDiagonalPosition(int xOffset, int steps = 1) => Position + new Position(xOffset, movementDirectionY) * steps;
+
+		protected virtual IEnumerable<Tile?> GetDiagonalTiles(int steps = 1) => GetDiagonalPosition(1, steps).MirrorX(Position).ToTiles(TileMap);
 
 		public override string ToString() => $"{Actor}'s piece at {CurrentTile}";
 
