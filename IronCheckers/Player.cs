@@ -27,9 +27,30 @@ public class Player : Actor
         Color = color;
 	}
 
+	protected override IEnumerable<ICommandAble> FilterCommandAble(IEnumerable<ICommandAble> source)
+	{
+        var zigZag = source.FirstOrDefault(c => c is Piece piece && piece.capturedThisTurn);
+        if (zigZag != null)
+        {
+            yield return zigZag;
+            yield break;
+        }
+        else
+        {
+            foreach (var commandable in source)
+                yield return commandable;
+        }
+	}
+
 	protected override void OnTurnStart()
 	{
 		Console.WriteLine($"{this}'s turn.");
+	}
+
+	protected override void OnTurnOver()
+	{
+        foreach (var piece in MyPieces)
+            piece.capturedThisTurn = false;
 	}
 
 	public override string ToString() => Name;

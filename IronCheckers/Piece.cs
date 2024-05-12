@@ -8,6 +8,7 @@ namespace IronCheckers
 		private static readonly string[] PIECE_CHARS = [@"[  ]"];
 
 		public int movementDirectionY;
+		public bool capturedThisTurn = false;
 
 		public override Func<IMoveable, Tile, IEnumerable<Tile>> DefaultMovementStrategy => IMoveable.ShortestDirect;
 
@@ -31,7 +32,7 @@ namespace IronCheckers
 		{
 			if (TileMap != null)
 			{
-				foreach (var tile in GetDiagonalTiles(1))
+				foreach (var tile in GetDiagonalTiles(Position, 1))
 				{
 					if (TryGetAction(tile?.CurrentTile, out var action))
 						yield return action;
@@ -43,7 +44,7 @@ namespace IronCheckers
 		{
 			if (TryMove(tile, out action))
 				return true;
-			else if (TryCapture(tile, out action))
+			else if (TryCapture(tile, Position, out action))
 				return true;
 			action = default;
 			return false;
@@ -60,14 +61,24 @@ namespace IronCheckers
 			return false;
 		}
 
-		protected bool TryCapture(Tile? tile, out ICommandAble.Command action)
+		protected bool TryCapture(Tile? tile, Position startPosition, out ICommandAble.Command action, bool deepCheck = true)
 		{
 			if (HasFoePiece(tile, out Piece? piece))
 			{
-				tile = TileMap[Position.FlipXY(tile.Position)];
-				if (ValidAndEmpty(tile))
+				var endTile = TileMap[startPosition.FlipXY(tile.Position)];
+				if (ValidAndEmpty(endTile))
 				{
-					action = new(() => Move(tile!), $"Capture {piece}", tile!.ToString());
+					bool canZigZag = false;
+					if (deepCheck)
+					{
+						foreach (var target in GetDiagonalTiles(endTile.Position, 1).Where(t => t != tile))
+						{
+							canZigZag = TryCapture(target, endTile.Position, out var _, false);
+							if (canZigZag)
+								break;
+						}
+					}
+					action = new(() => { Move(endTile!); capturedThisTurn = true; }, $"Capture {piece}", endTile!.ToString(), !canZigZag);
 					return true;
 				}
 			}
@@ -79,9 +90,11 @@ namespace IronCheckers
 
 		protected bool HasFoePiece(Tile? tile, out Piece? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
 
-		protected Position GetDiagonalPosition(int xOffset, int steps = 1) => Position + new Position(xOffset, movementDirectionY) * steps;
+		protected Position GetDiagonalPosition(Position startingPosition, int xOffset, int steps = 1) => startingPosition + new Position(xOffset, movementDirectionY) * steps;
 
-		protected virtual IEnumerable<Tile?> GetDiagonalTiles(int steps = 1) => GetDiagonalPosition(1, steps).MirrorX(Position).ToTiles(TileMap);
+		protected Position GetDiagonalPosition(int xOffset, int steps = 1) => GetDiagonalPosition(Position, xOffset, steps);
+
+		protected virtual IEnumerable<Tile?> GetDiagonalTiles(Position startingPosition, int steps = 1) => GetDiagonalPosition(startingPosition, 1, steps).MirrorX(Position).ToTiles(TileMap);
 
 		public override string ToString() => $"{Actor}'s piece at {CurrentTile}";
 

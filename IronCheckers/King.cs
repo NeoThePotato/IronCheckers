@@ -15,7 +15,7 @@ namespace IronCheckers
 			Chars = KING_CHARS;
 		}
 
-		protected override IEnumerable<Tile?> GetDiagonalTiles(int steps = 1) => GetDiagonalPosition(1, steps).MirrorXY(Position).ToTiles(TileMap);
+		protected override IEnumerable<Tile?> GetDiagonalTiles(Position startingPosition, int steps = 1) => GetDiagonalPosition(startingPosition, 1, steps).MirrorXY(Position).ToTiles(TileMap);
 
 		public override string ToString() => $"{Actor}'s king at {CurrentTile}";
 	}
