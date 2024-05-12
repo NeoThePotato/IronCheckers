@@ -10,7 +10,7 @@ namespace IronCheckers
 {
 	public class CheckersMap : RenderableTileMap
 	{
-		public CheckersMap(int sizeX, int sizeY, Tile? fillWith = null) : base(sizeX, sizeY, fillWith)
+		public CheckersMap(uint sizeX, uint sizeY, Tile? fillWith = null) : base(sizeX, sizeY, fillWith)
 		{ }
 
 		public IEnumerable<CheckersTile> CheckerboardTiles(uint offset = 0) => CheckerboardTiles(this, offset);
