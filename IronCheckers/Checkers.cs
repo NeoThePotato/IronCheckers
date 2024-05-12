@@ -4,11 +4,11 @@ using IronEngine.DefaultRenderer;
 
 namespace IronCheckers
 {
-    public class Checkers : Runtime
-    {
-        public Player whitePlayer, blackPlayer;
+	public class Checkers : Runtime
+	{
+		public Player whitePlayer, blackPlayer;
 
-        public IEnumerable<Player> Players => Actors.Cast<Player>();
+		public IEnumerable<Player> Players => Actors.Cast<Player>();
 
 		protected override bool ExitCondition => Players.Any(a => !a.HasPiecesLeft);
 
@@ -21,29 +21,23 @@ namespace IronCheckers
 			Console.WriteLine("Let the games begin!");
 		}
 
-        protected override TileMap CreateTileMap()
-        {
-            CheckersMap checkersMap = new(8, 8, new CheckersTile());
+		protected override TileMap CreateTileMap()
+		{
+			CheckersMap checkersMap = new(8, 8, new CheckersTile());
 			CreateTiles(checkersMap);
 			PlacePieces(checkersMap);
 			return checkersMap;
-        }
-
-		protected override IRenderer CreateRenderer()
-		{
-			return new ConsoleRenderer(TileMap);
 		}
 
-		protected override void OnGameStart()
-		{
-			(Input as ConsoleInput).SelectCommandAblePrompt = "Select Piece:";
-		}
+		protected override IRenderer CreateRenderer() => new ConsoleRenderer(TileMap);
+
+		protected override void OnGameStart() => (Input as ConsoleInput).SelectCommandAblePrompt = "Select Piece:";
 
 		protected override void OnExit()
-        {
+		{
 			Player winner = whitePlayer.HasPiecesLeft ? whitePlayer : blackPlayer;
 			Console.WriteLine($"Game ended.\n{winner} wins.");
-        }
+		}
 
 		private void CreateTiles(CheckersMap checkersMap)
 		{
@@ -62,10 +56,9 @@ namespace IronCheckers
 		private void PlacePieces(CheckersMap checkersMap)
 		{
 			foreach (var tile in checkersMap.CheckerboardTiles(1).Where(t => t.Position.y > 4))
-				tile.Object = new Piece(whitePlayer, -1);
+				tile.Object = new Man(whitePlayer, -1);
 			foreach (var tile in checkersMap.CheckerboardTiles(1).Where(t => t.Position.y < 3))
-				tile.Object = new Piece(blackPlayer, 1);
+				tile.Object = new Man(blackPlayer, 1);
 		}
 	}
 }
-

@@ -2,7 +2,7 @@
 
 namespace IronCheckers
 {
-	public class King : Piece
+	public class King : Man
 	{
 		private static readonly string[] KING_CHARS = [
 			@"[/\]",

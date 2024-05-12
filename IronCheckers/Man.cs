@@ -3,7 +3,7 @@ using DefaultRenderer.Defaults;
 
 namespace IronCheckers
 {
-	public class Piece : RenderableTileObject, ICommandAble, ICommandAble.IHasKey
+	public class Man : RenderableTileObject, ICommandAble, ICommandAble.IHasKey
 	{
 		private static readonly string[] PIECE_CHARS = [@"[  ]"];
 
@@ -12,12 +12,12 @@ namespace IronCheckers
 
 		public override Func<IMoveable, Tile, IEnumerable<Tile>> DefaultMovementStrategy => IMoveable.ShortestDirect;
 
-		public Piece(Player player, int movementDirection) : base(player)
+		public Man(Player player, int movementDirection) : base(player)
 		{
 			if (movementDirection == 0)
 				movementDirectionY = 1;
 			else
-				movementDirectionY = Math.ClampRange(movementDirection, -1, 1);
+				movementDirectionY = IronEngine.Math.ClampRange(movementDirection, -1, 1);
 			FgColor = player.Color;
 			Chars = PIECE_CHARS;
 		}
@@ -63,7 +63,7 @@ namespace IronCheckers
 
 		protected bool TryCapture(Tile? tile, Position startPosition, out ICommandAble.Command action, bool deepCheck = true)
 		{
-			if (HasFoePiece(tile, out Piece? piece))
+			if (HasFoePiece(tile, out Man? piece))
 			{
 				var endTile = TileMap[startPosition.FlipXY(tile.Position)];
 				if (ValidAndEmpty(endTile))
@@ -88,7 +88,7 @@ namespace IronCheckers
 
 		protected static bool ValidAndEmpty(Tile? tile) => tile != null && !tile.HasObject;
 
-		protected bool HasFoePiece(Tile? tile, out Piece? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
+		protected bool HasFoePiece(Tile? tile, out Man? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
 
 		protected Position GetDiagonalPosition(Position startingPosition, int xOffset, int steps = 1) => startingPosition + new Position(xOffset, movementDirectionY) * steps;
 
@@ -96,7 +96,7 @@ namespace IronCheckers
 
 		protected virtual IEnumerable<Tile?> GetDiagonalTiles(Position startingPosition, int steps = 1) => GetDiagonalPosition(startingPosition, 1, steps).MirrorX(startingPosition).ToTiles(TileMap);
 
-		public override string ToString() => $"{Actor}'s piece at {CurrentTile}";
+		public override string ToString() => $"{Actor}'s man at {CurrentTile}";
 
 		public string? Key => CurrentTile?.ToString();
 

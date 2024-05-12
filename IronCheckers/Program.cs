@@ -2,8 +2,8 @@
 
 internal static class Program
 {
-    public static void Main()
-    {
-        new Checkers().Run();
-    }
+	public static void Main()
+	{
+		new Checkers().Run();
+	}
 }

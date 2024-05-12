@@ -1,10 +1,5 @@
-﻿using DefaultRenderer.Defaults;
-using IronEngine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IronEngine;
+using DefaultRenderer.Defaults;
 
 namespace IronCheckers
 {
