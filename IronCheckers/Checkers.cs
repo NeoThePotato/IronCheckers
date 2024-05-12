@@ -27,7 +27,7 @@ namespace IronCheckers
 			foreach (var tile in tileMap.CheckerboardTiles())
 				tile.BgColor = ConsoleRenderer.COLOR_WHITE;
 			foreach (var tile in tileMap.CheckerboardTiles(1).Where(t => t.Position.y > 4))
-				tile.Object = new King(whitePlayer);
+				tile.Object = new Piece(whitePlayer, -1);
 			foreach (var tile in tileMap.CheckerboardTiles(1).Where(t => t.Position.y < 3))
 				tile.Object = new Piece(blackPlayer, 1);
 			return tileMap;
