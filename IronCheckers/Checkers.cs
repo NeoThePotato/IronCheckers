@@ -10,7 +10,7 @@ namespace IronCheckers
 
 		public IEnumerable<Player> Players => Actors.Cast<Player>();
 
-		protected override bool ExitCondition => Players.Any(a => !a.HasPiecesLeft);
+		protected override bool ExitCondition => Players.Any(p => p.Blocked);
 
 		protected override IInput Input => IInput.ConsoleInput;
 
@@ -18,7 +18,6 @@ namespace IronCheckers
 		{
 			yield return whitePlayer = new Player(Input.GetString("White Player, please enter your name: "), ConsoleRenderer.COLOR_WHITE);
 			yield return blackPlayer = new Player(Input.GetString("Black Player, please enter your name: "), 8);
-			Console.WriteLine("Let the games begin!");
 		}
 
 		protected override TileMap CreateTileMap()
@@ -31,11 +30,15 @@ namespace IronCheckers
 
 		protected override IRenderer CreateRenderer() => new ConsoleRenderer(TileMap);
 
-		protected override void OnGameStart() => (Input as ConsoleInput).SelectCommandAblePrompt = "Select Piece:";
+		protected override void OnGameStart()
+		{
+			(Input as ConsoleInput).SelectCommandAblePrompt = "Select Piece:";
+			Console.WriteLine("Let the games begin!");
+		}
 
 		protected override void OnExit()
 		{
-			Player winner = whitePlayer.HasPiecesLeft ? whitePlayer : blackPlayer;
+			Player winner = Players.Single(p => !p.Blocked);
 			Console.WriteLine($"Game ended.\n{winner} wins.");
 		}
 

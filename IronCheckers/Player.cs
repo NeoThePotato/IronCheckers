@@ -13,6 +13,10 @@ public class Player : Actor
 
 	public int RemainingPieces => MyPieces.Count();
 
+	public bool Blocked => !HasAvailableActions;
+
+	public bool HasAvailableActions => MyPieces.Any(p => p.GetAvailableActions().Any());
+
 	public bool HasPiecesLeft => MyPieces.Any();
 	#endregion
 
