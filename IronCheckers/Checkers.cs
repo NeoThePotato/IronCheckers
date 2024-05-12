@@ -23,14 +23,10 @@ namespace IronCheckers
 
         protected override TileMap CreateTileMap()
         {
-            CheckersMap tileMap = new(8, 8, new CheckersTile());
-			foreach (var tile in tileMap.CheckerboardTiles())
-				tile.BgColor = ConsoleRenderer.COLOR_WHITE;
-			foreach (var tile in tileMap.CheckerboardTiles(1).Where(t => t.Position.y > 4))
-				tile.Object = new Piece(whitePlayer, -1);
-			foreach (var tile in tileMap.CheckerboardTiles(1).Where(t => t.Position.y < 3))
-				tile.Object = new Piece(blackPlayer, 1);
-			return tileMap;
+            CheckersMap checkersMap = new(8, 8, new CheckersTile());
+			CreateTiles(checkersMap);
+			PlacePieces(checkersMap);
+			return checkersMap;
         }
 
 		protected override IRenderer CreateRenderer()
@@ -47,6 +43,28 @@ namespace IronCheckers
         {
             Console.WriteLine("Game ended");
         }
+
+		private void CreateTiles(CheckersMap checkersMap)
+		{
+			int whitePlayerY = 0;
+			int blackPlayerY = checkersMap.SizeY - 1;
+			for (var x = 0; x < checkersMap.SizeX; x++)
+			{
+				checkersMap[x, whitePlayerY] = new KingMaker(whitePlayer);
+				checkersMap[x, blackPlayerY] = new KingMaker(blackPlayer);
+			}
+
+			foreach (var tile in checkersMap.CheckerboardTiles())
+				tile.BgColor = ConsoleRenderer.COLOR_WHITE;
+		}
+
+		private void PlacePieces(CheckersMap checkersMap)
+		{
+			foreach (var tile in checkersMap.CheckerboardTiles(1).Where(t => t.Position.y > 4))
+				tile.Object = new Piece(whitePlayer, -1);
+			foreach (var tile in checkersMap.CheckerboardTiles(1).Where(t => t.Position.y < 3))
+				tile.Object = new Piece(blackPlayer, 1);
+		}
 	}
 }
 
