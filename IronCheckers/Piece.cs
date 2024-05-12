@@ -52,7 +52,7 @@ namespace IronCheckers
 
 		protected bool TryMove(Tile? tile, out ICommandAble.Command action)
 		{
-			if (ValidAndEmpty(tile))
+			if (ValidAndEmpty(tile) && !capturedThisTurn)
 			{
 				action = new(() => Move(tile!), $"Move to {tile}", tile!.ToString());
 				return true;
@@ -94,7 +94,7 @@ namespace IronCheckers
 
 		protected Position GetDiagonalPosition(int xOffset, int steps = 1) => GetDiagonalPosition(Position, xOffset, steps);
 
-		protected virtual IEnumerable<Tile?> GetDiagonalTiles(Position startingPosition, int steps = 1) => GetDiagonalPosition(startingPosition, 1, steps).MirrorX(Position).ToTiles(TileMap);
+		protected virtual IEnumerable<Tile?> GetDiagonalTiles(Position startingPosition, int steps = 1) => GetDiagonalPosition(startingPosition, 1, steps).MirrorX(startingPosition).ToTiles(TileMap);
 
 		public override string ToString() => $"{Actor}'s piece at {CurrentTile}";
 
