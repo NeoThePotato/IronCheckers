@@ -1,5 +1,6 @@
 ﻿using IronEngine;
 using DefaultRenderer.Defaults;
+using Microsoft.VisualBasic;
 
 namespace IronCheckers
 {
@@ -61,30 +62,22 @@ namespace IronCheckers
 			return false;
 		}
 
-		protected bool TryCapture(Tile? tile, Position startPosition, out ICommandAble.Command action, bool deepCheck = true)
+		protected bool TryCapture(Tile? tile, Position startPosition, out ICommandAble.Command action, bool checkZigZag = true)
 		{
 			if (HasFoePiece(tile, out Man? piece))
 			{
 				var endTile = TileMap[startPosition.FlipXY(tile.Position)];
 				if (ValidAndEmpty(endTile))
 				{
-					bool canZigZag = false;
-					if (deepCheck)
-					{
-						foreach (var target in GetDiagonalTiles(endTile.Position, 1).Where(t => t != tile))
-						{
-							canZigZag = TryCapture(target, endTile.Position, out var _, false);
-							if (canZigZag)
-								break;
-						}
-					}
-					action = new(() => { Move(endTile!); capturedThisTurn = true; }, $"Capture {piece}", endTile!.ToString(), !canZigZag);
+					action = new(() => { Move(endTile!); capturedThisTurn = true; }, $"Capture {piece}", endTile!.ToString(), !CanZigZag(endTile!, tile));
 					return true;
 				}
 			}
 			action = default;
 			return false;
 		}
+
+		protected bool CanZigZag(Tile tileAfterFirstCapture, Tile exclude) => GetDiagonalTiles(tileAfterFirstCapture.Position, 1).Where(t => t != exclude).Any(t => TryCapture(t, tileAfterFirstCapture.Position, out var _, false));
 
 		protected static bool ValidAndEmpty(Tile? tile) => tile != null && !tile.HasObject;
 
