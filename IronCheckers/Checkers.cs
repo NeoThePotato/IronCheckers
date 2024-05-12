@@ -41,7 +41,8 @@ namespace IronCheckers
 
 		protected override void OnExit()
         {
-            Console.WriteLine("Game ended");
+			Player winner = whitePlayer.HasPiecesLeft ? whitePlayer : blackPlayer;
+			Console.WriteLine($"Game ended.\n{winner} wins.");
         }
 
 		private void CreateTiles(CheckersMap checkersMap)
