@@ -69,7 +69,7 @@ namespace IronCheckers
 				var endTile = TileMap[startPosition.FlipXY(tile.Position)];
 				if (ValidAndEmpty(endTile))
 				{
-					action = new(() => { Move(endTile!); capturedThisTurn = true; }, $"Capture {piece}", endTile!.ToString(), !CanZigZag(endTile!, tile));
+					action = new(() => { Move(endTile!); capturedThisTurn = true; }, $"Capture {piece}", tile!.ToString(), !CanZigZag(endTile!, tile));
 					return true;
 				}
 			}
