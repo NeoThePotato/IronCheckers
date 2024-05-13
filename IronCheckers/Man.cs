@@ -1,24 +1,25 @@
 ﻿using IronEngine;
 using DefaultRenderer.Defaults;
-using Microsoft.VisualBasic;
 
 namespace IronCheckers
 {
+	using MovementFunc = Func<Position, int, IEnumerable<Tile?>>;
+
 	public class Man : RenderableTileObject, ICommandAble, ICommandAble.IHasKey
 	{
+
 		private static readonly string[] PIECE_CHARS = [@"[  ]"];
 
-		public int movementDirectionY;
+		protected MovementFunc _movementFunc;
 		public bool capturedThisTurn = false;
 
 		public override Func<IMoveable, Tile, IEnumerable<Tile>> DefaultMovementStrategy => IMoveable.ShortestDirect;
 
 		public Man(Player player, int movementDirection) : base(player)
 		{
-			if (movementDirection == 0)
-				movementDirectionY = 1;
-			else
-				movementDirectionY = IronEngine.Math.ClampRange(movementDirection, -1, 1);
+			if (System.Math.Abs(movementDirection) != 1)
+				throw new ArgumentOutOfRangeException("Movement direction needs to be either 1 or -1");
+			_movementFunc = (p, s) => GetDiagonalForwardTiles(p, movementDirection, s);
 			FgColor = player.Color;
 			Chars = PIECE_CHARS;
 		}
@@ -33,7 +34,8 @@ namespace IronCheckers
 		{
 			if (TileMap != null)
 			{
-				foreach (var tile in GetDiagonalTiles(Position, 1))
+				MovementFunc movementFunc = capturedThisTurn ? GetDiagonalTiles : _movementFunc;
+				foreach (var tile in movementFunc(Position, 1))
 				{
 					if (TryGetAction(tile?.CurrentTile, out var action))
 						yield return action;
@@ -77,22 +79,22 @@ namespace IronCheckers
 			return false;
 		}
 
-		protected bool CanZigZag(Tile tileAfterFirstCapture, Tile exclude) => GetDiagonalTiles(tileAfterFirstCapture.Position, 1).Where(t => t != exclude).Any(t => TryCapture(t, tileAfterFirstCapture.Position, out var _, false));
-
-		protected static bool ValidAndEmpty(Tile? tile) => tile != null && !tile.HasObject;
+		protected bool CanZigZag(Tile tileAfterFirstCapture, Tile exclude) => GetDiagonalTiles(tileAfterFirstCapture.Position).Where(t => t != exclude).Any(t => TryCapture(t, tileAfterFirstCapture.Position, out var _, false));
 
 		protected bool HasFoePiece(Tile? tile, out Man? piece) => tile.TryGetObject(out piece) && piece!.Actor != Actor;
 
-		protected Position GetDiagonalPosition(Position startingPosition, int xOffset, int steps = 1) => startingPosition + new Position(xOffset, movementDirectionY) * steps;
+		protected IEnumerable<Tile?> GetDiagonalForwardTiles(Position startingPosition, int yMovementDirection, int steps = 1) => GetDiagonalPosition(startingPosition, 1, yMovementDirection, steps).MirrorX(startingPosition).ToTiles(TileMap);
 
-		protected Position GetDiagonalPosition(int xOffset, int steps = 1) => GetDiagonalPosition(Position, xOffset, steps);
-
-		protected virtual IEnumerable<Tile?> GetDiagonalTiles(Position startingPosition, int steps = 1) => GetDiagonalPosition(startingPosition, 1, steps).MirrorX(startingPosition).ToTiles(TileMap);
+		protected IEnumerable<Tile?> GetDiagonalTiles(Position startingPosition, int steps = 1) => GetDiagonalPosition(startingPosition, 1, 1, steps).MirrorXY(Position).ToTiles(TileMap);
 
 		public override string ToString() => $"{Actor}'s man at {CurrentTile}";
 
 		public string? Key => CurrentTile?.ToString();
 
 		public string Description => ToString();
+
+		protected static bool ValidAndEmpty(Tile? tile) => tile != null && !tile.HasObject;
+
+		protected static Position GetDiagonalPosition(Position startingPosition, int xOffset, int yOffset, int steps = 1) => startingPosition + new Position(xOffset, yOffset) * steps;
 	}
 }
